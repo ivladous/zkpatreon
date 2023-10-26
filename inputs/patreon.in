@@ -3,9 +3,10 @@
 receiver: address = aleo1f9flftalnnfzc05g02c54wpx032us94yjlvvfkdjmzn9rnv9gvrqk7ad4u;
 amount: u64 = 10000u64;
 
-[add_item]
-item_id: u8 = 1u8;
-url: u64 = 1234u64;
+[add_content_info]
+name: u64 = 1u64;
+quantity: u64 =  5u64;
+price: u64 = 100u64;
 
 [make_order]
 token: Token = Token {
@@ -13,22 +14,18 @@ token: Token = Token {
   amount: 10000u64,
   _nonce: 3808228383764475611350675885864344489036974763786926796070051479956701332802group
 };
-item_id: u8 = 1u8;
-author: address = aleo1r57pmay8uaf03rkgsjmgnsazycwlmf5j6ztuxwgvdwthqpljgsyquz66kc;
-deposit_amount: u64 = 50u64;
-
-[transfer_item]
-order: Order = Order {
-  owner: aleo1r57pmay8uaf03rkgsjmgnsazycwlmf5j6ztuxwgvdwthqpljgsyquz66kc,
-  item_id: 1u8,
-  buyer: aleo1f9flftalnnfzc05g02c54wpx032us94yjlvvfkdjmzn9rnv9gvrqk7ad4u,
-  deposit_amount: 50u64,
-  _nonce: 5163755425595014593850197247457168002659559109090154681936823287600544195358group
-};
-item: Item = Item {
-  owner: aleo1r57pmay8uaf03rkgsjmgnsazycwlmf5j6ztuxwgvdwthqpljgsyquz66kc,
-  item_id: 1u8,
+order_info: OrderInfo = OrderInfo {
+  content_id: 1u8,
   author: aleo1r57pmay8uaf03rkgsjmgnsazycwlmf5j6ztuxwgvdwthqpljgsyquz66kc,
-  url: 1234u64,
-  _nonce: 4204242657747888792161419042862183209110776724289519706250481898868949664617group
+  deposit: 50u64,
 };
+
+[release_content]
+order: Order = Order  {
+  owner: aleo1r57pmay8uaf03rkgsjmgnsazycwlmf5j6ztuxwgvdwthqpljgsyquz66kc,
+  content_id: 1u8,
+  buyer: aleo1f9flftalnnfzc05g02c54wpx032us94yjlvvfkdjmzn9rnv9gvrqk7ad4u,
+  deposit: 50u64,
+  _nonce: 1016328918180488432929639672662539673436830274631408795380363870150634251360group
+};
+url: u64 = 21345u64;
