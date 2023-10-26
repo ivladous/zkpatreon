@@ -89,16 +89,15 @@ program patreon.aleo {
         let info: ContentInfo = Mapping::get(content_info, content_id);
         assert(info.quantity > 0u64);
         assert(deposit_amount > info.price);
-        // assert(Mapping::get(token.leo/account, buyer) >= deposit_amount);
+        assert(Mapping::get(token.leo/account, buyer) >= deposit_amount);
 
         let remaining: u64 = info.quantity - 1u64;
-        let new_info = {
+        let new_info: ContentInfo = ContentInfo {
             name: info.name,
             author: info.author,
             quantity: remaining,
-            price:info.price,
+            price: info.price,
         };
-        Mapping::set(content_info, content_id, info);
+        Mapping::set(content_info, content_id, new_info);
     }
-}
 }
