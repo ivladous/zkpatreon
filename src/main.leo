@@ -48,24 +48,6 @@ program patreon.aleo {
         Mapping::set(content_info, key, info);
     }
 
-    transition fulfil_order(content: Content, order: Order, content_info: u64) -> (Content) {
-        let temp_content: Content = Content {
-            owner: order.buyer,
-            content_id: content.content_id,
-            name: content.name,
-            author: content.author,
-            content: content_info, 
-        };
-
-        return (temp_content) then finalize(content.content_id, content.author, self.caller);
-    }
-
-    finalize fulfil_order(content_id: u64, author: address, buyer: address) {
-        let info: ContentInfo = Mapping::get(content_info, content_id);
-        assert(Mapping::get(token.leo/account, buyer) >= info.price);
-        token.leo/transfer_public_from(buyer, author, info.price);
-    }
-
     transition make_order(content_id: u64, name: u64, author: address, deposit_amount: u64) -> (Content, Order) {
         let temp_content: Content = Content {
             owner: author,
@@ -99,5 +81,23 @@ program patreon.aleo {
             price: info.price,
         };
         Mapping::set(content_info, content_id, new_info);
+    }
+
+    transition fulfil_order(content: Content, order: Order, content_info: u64) -> (Content) {
+        let temp_content: Content = Content {
+            owner: order.buyer,
+            content_id: content.content_id,
+            name: content.name,
+            author: content.author,
+            content: content_info, 
+        };
+
+        return (temp_content) then finalize(content.content_id, content.author, self.caller);
+    }
+
+    finalize fulfil_order(content_id: u64, author: address, buyer: address) {
+        let info: ContentInfo = Mapping::get(content_info, content_id);
+        assert(Mapping::get(token.leo/account, buyer) >= info.price);
+        token.leo/transfer_public_from(buyer, author, info.price);
     }
 }
