@@ -14,7 +14,7 @@ quantity: u64 = 2u64;
 price: u64 = 3u64;
 
 [make_order_private]
-payment: token = token {
+payment: Token = Token {
   owner: aleo1f9flftalnnfzc05g02c54wpx032us94yjlvvfkdjmzn9rnv9gvrqk7ad4u,
   amount: 50u64,
   _nonce: 2305853595702266951312055185631402554992680981554430426029727643958510992704group
@@ -26,15 +26,15 @@ deposit_amount: u64 = 50u64;
 
 [fulfil_order_private]
 content: Content = Content {
-  owner: aleo1aet5qeq55cj5dk0dlemrvax0f2se8d6dr9l2anflx2vkajcmecqqxdzp3x,
+  owner: aleo1r57pmay8uaf03rkgsjmgnsazycwlmf5j6ztuxwgvdwthqpljgsyquz66kc,
   content_id: 1u8,
   name: 2u64,
   author: aleo1r57pmay8uaf03rkgsjmgnsazycwlmf5j6ztuxwgvdwthqpljgsyquz66kc,
-  content: 1234u64,
+  content: 0u64,
   _nonce: 4204242657747888792161419042862183209110776724289519706250481898868949664617group
 };
 order: Order = Order {
-  owner: aleo1aet5qeq55cj5dk0dlemrvax0f2se8d6dr9l2anflx2vkajcmecqqxdzp3x,
+  owner: aleo1r57pmay8uaf03rkgsjmgnsazycwlmf5j6ztuxwgvdwthqpljgsyquz66kc,
   content_id: 1u8,
   buyer: aleo1f9flftalnnfzc05g02c54wpx032us94yjlvvfkdjmzn9rnv9gvrqk7ad4u,
   deposit_amount: 50u64,
@@ -50,7 +50,7 @@ deposit_amount: u64 = 50u64;
 
 [fulfil_order_public]
 content: Content = Content {
-  owner: aleo1aet5qeq55cj5dk0dlemrvax0f2se8d6dr9l2anflx2vkajcmecqqxdzp3x,
+  owner: aleo1r57pmay8uaf03rkgsjmgnsazycwlmf5j6ztuxwgvdwthqpljgsyquz66kc,
   content_id: 1u8,
   name: 2u64,
   author: aleo1r57pmay8uaf03rkgsjmgnsazycwlmf5j6ztuxwgvdwthqpljgsyquz66kc,
@@ -58,7 +58,7 @@ content: Content = Content {
   _nonce: 4204242657747888792161419042862183209110776724289519706250481898868949664617group
 };
 order: Order = Order {
-  owner: aleo1aet5qeq55cj5dk0dlemrvax0f2se8d6dr9l2anflx2vkajcmecqqxdzp3x,
+  owner: aleo1r57pmay8uaf03rkgsjmgnsazycwlmf5j6ztuxwgvdwthqpljgsyquz66kc,
   content_id: 1u8,
   buyer: aleo1f9flftalnnfzc05g02c54wpx032us94yjlvvfkdjmzn9rnv9gvrqk7ad4u,
   deposit_amount: 50u64,
