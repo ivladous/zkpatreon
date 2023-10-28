@@ -91,10 +91,10 @@ program patreon.aleo {
             deposit_amount,
         };
 
-        return (remaining_token, temp_content, new_order) then finalize(content_id, name, author, self.caller, deposit_amount);
+        return (remaining_token, temp_content, new_order) then finalize(content_id, deposit_amount);
     }
 
-    finalize make_order_private(content_id: u8, name: u64, author: address, buyer: address, deposit_amount: u64) {
+    finalize make_order_private(content_id: u8, deposit_amount: u64) {
         let info: ContentInfo = Mapping::get(content_info, content_id);
         assert(info.quantity > 0u64);
         assert_eq(deposit_amount, info.price);
@@ -110,7 +110,7 @@ program patreon.aleo {
     }
 
     transition fulfil_order_private(content: Content, order: Order, content_data: u64) -> (Token, Content) {
-        let temp_content: Content = Content {
+        let filled_content: Content = Content {
             owner: order.buyer,
             content_id: content.content_id,
             name: content.name,
@@ -123,7 +123,7 @@ program patreon.aleo {
             amount: order.deposit_amount
         };
 
-        return (payout, temp_content);
+        return (payout, filled_content);
     }
 
     transition make_order_public(content_id: u8, name: u64, author: address, deposit_amount: u64) -> (Content, Order) {
@@ -142,10 +142,10 @@ program patreon.aleo {
             deposit_amount,
         };
 
-        return (temp_content, new_order) then finalize(content_id, name, author, self.caller, deposit_amount);
+        return (temp_content, new_order) then finalize(content_id, deposit_amount);
     }
 
-    finalize make_order_public(content_id: u8, name: u64, author: address, buyer: address, deposit_amount: u64) {
+    finalize make_order_public(content_id: u8, deposit_amount: u64) {
         let info: ContentInfo = Mapping::get(content_info, content_id);
         assert(info.quantity > 0u64);
         assert_eq(deposit_amount, info.price);
@@ -161,7 +161,7 @@ program patreon.aleo {
     }
 
     transition fulfil_order_public(content: Content, order: Order, content_data: u64) -> (Content) {
-        let temp_content: Content = Content {
+        let filled_content: Content = Content {
             owner: order.buyer,
             content_id: content.content_id,
             name: content.name,
@@ -170,14 +170,14 @@ program patreon.aleo {
         };
 
 
-        return (temp_content) then finalize (order.buyer, content.author, order.deposit_amount);
+        return (filled_content) then finalize (order.buyer, content.author, order.deposit_amount);
     }
 
-    finalize fulfil_order_public (public sender: address, public receiver: address, public amount: u64) {
+    finalize fulfil_order_public (public buyer: address, public author: address, public amount: u64) {
         // Make public payment
-        let sender_amount: u64 = Mapping::get_or_use(account, sender, 0u64);
-        Mapping::set(account, sender, sender_amount - amount);
-        let receiver_amount: u64 = Mapping::get_or_use(account, receiver, 0u64);
-        Mapping::set(account, receiver, receiver_amount + amount);
+        let buyer_amount: u64 = Mapping::get_or_use(account, buyer, 0u64);
+        Mapping::set(account, buyer, buyer_amount - amount);
+        let author_amount: u64 = Mapping::get_or_use(account, author, 0u64);
+        Mapping::set(account, author, author_amount + amount);
     }
 }
