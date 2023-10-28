@@ -1,7 +1,6 @@
-import token.leo;
-
 // The content marketplace platform
 program patreon.aleo {
+    mapping account: address => u64;
     mapping content_info: u8 => ContentInfo;
     mapping next_id: bool => u8;
 
@@ -10,6 +9,11 @@ program patreon.aleo {
         author: address,
         quantity: u64,
         price: u64,
+    }
+    
+    record Token {
+        owner: address,
+        amount: u64,
     }
 
     record Content {
@@ -26,15 +30,23 @@ program patreon.aleo {
         buyer: address,
         deposit_amount: u64,
     }
-
-    // Helper functions. Please ignore
-    transition mint_token_public(receiver: address, amount: u64) {
-        token.leo/mint_public(receiver, amount);
+    
+    // The function `mint_public` issues the specified token amount for the token receiver publicly on the network.
+    transition mint_token_public(public receiver: address, public amount: u64) {
+        return then finalize(receiver, amount);
     }
 
-    transition mint_token_private(receiver: address, amount: u64) -> (token.leo/token.record) {
-        let new_token: token = token.leo/mint_private(receiver, amount);
-        return (new_token);
+    finalize mint_token_public(public receiver: address, public amount: u64) {
+        let receiver_amount: u64 = Mapping::get_or_use(account, receiver, 0u64);
+        Mapping::set(account, receiver, receiver_amount + amount);
+    }
+
+    // The function `mint_private` initializes a new record with the specified amount of tokens for the receiver.
+    transition mint_token_private(receiver: address, amount: u64) -> Token {
+        return Token {
+            owner: receiver,
+            amount: amount,
+        };
     }
 
     // Authors will use this to add content to sell
@@ -55,10 +67,14 @@ program patreon.aleo {
         Mapping::set(content_info, key, info);
     }
 
-    transition make_order_private(payment: token.leo/token.record, content_id: u8, name: u64, author: address, deposit_amount: u64) -> (token.leo/token.record, Content, Order) {
+    transition make_order_private(payment: Token, content_id: u8, name: u64, author: address, deposit_amount: u64) -> (Token, Content, Order) {
         assert(payment.amount >= deposit_amount);
         let remainder: u64 = payment.amount - deposit_amount;
-        let remaining_token: token = token.leo/mint_private(self.caller, remainder);
+
+        let remaining_token: Token = Token {
+            owner: self.caller,
+            amount: remainder,
+        };
 
         let temp_content: Content = Content {
             owner: author,
@@ -93,7 +109,7 @@ program patreon.aleo {
         Mapping::set(content_info, content_id, new_info);
     }
 
-    transition fulfil_order_private(content: Content, order: Order, content_data: u64) -> (token.leo/token.record, Content) {
+    transition fulfil_order_private(content: Content, order: Order, content_data: u64) -> (Token, Content) {
         let temp_content: Content = Content {
             owner: order.buyer,
             content_id: content.content_id,
@@ -102,7 +118,10 @@ program patreon.aleo {
             content: content_data, 
         };
 
-        let payout: token = token.leo/mint_private(content.author, order.deposit_amount);
+        let payout: Token = Token{
+            owner: content.author,
+            amount: order.deposit_amount
+        };
 
         return (payout, temp_content);
     }
@@ -150,9 +169,15 @@ program patreon.aleo {
             content: content_data, 
         };
 
-        // Make payment. Logic & checks are handled by the token program
-        token.leo/transfer_public_from(order.buyer, content.author, order.deposit_amount);
 
-        return (temp_content);
+        return (temp_content) then finalize (order.buyer, content.author, order.deposit_amount);
+    }
+
+    finalize fulfil_order_public (public sender: address, public receiver: address, public amount: u64) {
+        // Make public payment
+        let sender_amount: u64 = Mapping::get_or_use(account, sender, 0u64);
+        Mapping::set(account, sender, sender_amount - amount);
+        let receiver_amount: u64 = Mapping::get_or_use(account, receiver, 0u64);
+        Mapping::set(account, receiver, receiver_amount + amount);
     }
 }
