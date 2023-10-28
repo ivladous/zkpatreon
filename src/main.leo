@@ -91,13 +91,15 @@ program patreon.aleo {
             deposit_amount,
         };
 
-        return (remaining_token, temp_content, new_order) then finalize(content_id, deposit_amount);
+        return (remaining_token, temp_content, new_order) then finalize(content_id, name, author, deposit_amount);
     }
 
-    finalize make_order_private(content_id: u8, deposit_amount: u64) {
+    finalize make_order_private(content_id: u8, name: u64, author: address, deposit_amount: u64) {
         let info: ContentInfo = Mapping::get(content_info, content_id);
         assert(info.quantity > 0u64);
         assert_eq(deposit_amount, info.price);
+        assert_eq(name, info.name);
+        assert_eq(author, info.author);
 
         let remaining: u64 = info.quantity - 1u64;
         let new_info: ContentInfo = ContentInfo {
@@ -142,13 +144,15 @@ program patreon.aleo {
             deposit_amount,
         };
 
-        return (temp_content, new_order) then finalize(content_id, deposit_amount);
+        return (temp_content, new_order) then finalize(content_id, name, author, deposit_amount);
     }
 
-    finalize make_order_public(content_id: u8, deposit_amount: u64) {
+    finalize make_order_public(content_id: u8, name: u64, author: address, deposit_amount: u64) {
         let info: ContentInfo = Mapping::get(content_info, content_id);
         assert(info.quantity > 0u64);
         assert_eq(deposit_amount, info.price);
+        assert_eq(name, info.name);
+        assert_eq(author, info.author);
 
         let remaining: u64 = info.quantity - 1u64;
         let new_info: ContentInfo = ContentInfo {
