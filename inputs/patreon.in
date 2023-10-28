@@ -1,31 +1,67 @@
 // The program input for patreon/src/main.leo
-[mint_token]
+[mint_token_public]
 receiver: address = aleo1f9flftalnnfzc05g02c54wpx032us94yjlvvfkdjmzn9rnv9gvrqk7ad4u;
 amount: u64 = 10000u64;
 
-[add_content_info]
+[mint_token_private]
+receiver: address = aleo1f9flftalnnfzc05g02c54wpx032us94yjlvvfkdjmzn9rnv9gvrqk7ad4u;
+amount: u64 = 10000u64;
+
+[add_content]
 name: u64 = 1u64;
-quantity: u64 =  5u64;
-price: u64 = 100u64;
+author: address = aleo1f9flftalnnfzc05g02c54wpx032us94yjlvvfkdjmzn9rnv9gvrqk7ad4u;
+quantity: u64 = 2u64;
+price: u64 = 3u64;
 
-[make_order]
-token: Token = Token {
+[make_order_private]
+payment: token = token {
   owner: aleo1f9flftalnnfzc05g02c54wpx032us94yjlvvfkdjmzn9rnv9gvrqk7ad4u,
-  amount: 10000u64,
-  _nonce: 3808228383764475611350675885864344489036974763786926796070051479956701332802group
+  amount: 50u64,
+  _nonce: 2305853595702266951312055185631402554992680981554430426029727643958510992704group
 };
-order_info: OrderInfo = OrderInfo {
-  content_id: 1u8,
-  author: aleo1r57pmay8uaf03rkgsjmgnsazycwlmf5j6ztuxwgvdwthqpljgsyquz66kc,
-  deposit: 50u64,
-};
+content_id: u8 = 1u8;
+name: u64 = 2u64;
+author: address = aleo1r57pmay8uaf03rkgsjmgnsazycwlmf5j6ztuxwgvdwthqpljgsyquz66kc;
+deposit_amount: u64 = 50u64;
 
-[release_content]
-order: Order = Order  {
-  owner: aleo1r57pmay8uaf03rkgsjmgnsazycwlmf5j6ztuxwgvdwthqpljgsyquz66kc,
+[fulfil_order_private]
+content: Content = Content {
+  owner: aleo1aet5qeq55cj5dk0dlemrvax0f2se8d6dr9l2anflx2vkajcmecqqxdzp3x,
+  content_id: 1u8,
+  name: 2u64,
+  author: aleo1r57pmay8uaf03rkgsjmgnsazycwlmf5j6ztuxwgvdwthqpljgsyquz66kc,
+  content: 1234u64,
+  _nonce: 4204242657747888792161419042862183209110776724289519706250481898868949664617group
+};
+order: Order = Order {
+  owner: aleo1aet5qeq55cj5dk0dlemrvax0f2se8d6dr9l2anflx2vkajcmecqqxdzp3x,
   content_id: 1u8,
   buyer: aleo1f9flftalnnfzc05g02c54wpx032us94yjlvvfkdjmzn9rnv9gvrqk7ad4u,
-  deposit: 50u64,
-  _nonce: 1016328918180488432929639672662539673436830274631408795380363870150634251360group
+  deposit_amount: 50u64,
+  _nonce: 5163755425595014593850197247457168002659559109090154681936823287600544195358group
 };
-url: u64 = 21345u64;
+content_info: u64 = 1234u64;
+
+[make_order_public]
+content_id: u8 = 1u8;
+name: u64 = 2u64;
+author: address = aleo1r57pmay8uaf03rkgsjmgnsazycwlmf5j6ztuxwgvdwthqpljgsyquz66kc;
+deposit_amount: u64 = 50u64;
+
+[fulfil_order_public]
+content: Content = Content {
+  owner: aleo1aet5qeq55cj5dk0dlemrvax0f2se8d6dr9l2anflx2vkajcmecqqxdzp3x,
+  content_id: 1u8,
+  name: 2u64,
+  author: aleo1r57pmay8uaf03rkgsjmgnsazycwlmf5j6ztuxwgvdwthqpljgsyquz66kc,
+  content: 1234u64,
+  _nonce: 4204242657747888792161419042862183209110776724289519706250481898868949664617group
+};
+order: Order = Order {
+  owner: aleo1aet5qeq55cj5dk0dlemrvax0f2se8d6dr9l2anflx2vkajcmecqqxdzp3x,
+  content_id: 1u8,
+  buyer: aleo1f9flftalnnfzc05g02c54wpx032us94yjlvvfkdjmzn9rnv9gvrqk7ad4u,
+  deposit_amount: 50u64,
+  _nonce: 5163755425595014593850197247457168002659559109090154681936823287600544195358group
+};
+content_info: u64 = 1234u64;
