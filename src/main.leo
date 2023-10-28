@@ -81,7 +81,7 @@ program patreon.aleo {
     finalize make_order_private(content_id: u8, name: u64, author: address, buyer: address, deposit_amount: u64) {
         let info: ContentInfo = Mapping::get(content_info, content_id);
         assert(info.quantity > 0u64);
-        assert(deposit_amount > info.price);
+        assert_eq(deposit_amount, info.price);
 
         let remaining: u64 = info.quantity - 1u64;
         let new_info: ContentInfo = ContentInfo {
@@ -129,7 +129,7 @@ program patreon.aleo {
     finalize make_order_public(content_id: u8, name: u64, author: address, buyer: address, deposit_amount: u64) {
         let info: ContentInfo = Mapping::get(content_info, content_id);
         assert(info.quantity > 0u64);
-        assert(deposit_amount > info.price);
+        assert_eq(deposit_amount, info.price);
 
         let remaining: u64 = info.quantity - 1u64;
         let new_info: ContentInfo = ContentInfo {
