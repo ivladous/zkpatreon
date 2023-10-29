@@ -3,7 +3,7 @@ from helpers import bigint_to_string
 
 
 def main():
-    decoded = bigint_to_string(sys.argv[1])
+    decoded = bigint_to_string(int(sys.argv[1]))
     print(f"Decoded: {decoded}")
 
 
